@@ -17,11 +17,42 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 
+
 [tool.pdm]
 distribution = true
 
+[tool.pdm.src]
+pakege-dir = "src"
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=24.10.0",
+    "isort>=5.13.2",
+    "flake8>=7.1.1",
+]
 [project.entry-points."pytest11"]
 result_log = "pytest_result_sender.plugin"
 
-[tool.pdm.src]
-pakege-dir = "src"
+[tool.isort]
+profile="black"
+multi_line_output=3
+
+[tool.black]
+exclude='''
+/(
+     \.git
+   | \.hg
+   | \.tox
+   | venv
+   | buck-out
+   | dist
+   | build
+
+)/
+'''
+[tool.pdm.scripts]
+check={ composite=[
+    "isort .",
+    "black .",
+    "flake8 .",
+] }
+test="pytest"
